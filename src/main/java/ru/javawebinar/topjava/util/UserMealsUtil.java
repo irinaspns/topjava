@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.Month;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class UserMealsUtil {
     public static void main(String[] args) {
@@ -28,12 +29,14 @@ public class UserMealsUtil {
     }
 
     public static List<UserMealWithExcess> filteredByCycles(List<UserMeal> meals, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
+        System.out.println("Implement by cycles");
+        meals.sort(Comparator.comparing(UserMeal::getDateTime));
+
         Map<LocalDate, Integer> map = new HashMap<>();
         for (UserMeal um : meals) {
             map.merge(um.getDateTime().toLocalDate(), um.getCalories(), Integer::sum);
         }
 
-        meals.sort(Comparator.comparing(UserMeal::getDateTime));
         List<UserMealWithExcess> list = new ArrayList<>();
         for (UserMeal um : meals) {
             if (TimeUtil.isBetweenInclusive(um.getDateTime().toLocalTime(), startTime, endTime)) {
@@ -45,10 +48,18 @@ public class UserMealsUtil {
     }
 
     public static List<UserMealWithExcess> filteredByStreams(List<UserMeal> meals, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
-        // TODO Implement by streams
         System.out.println("Implement by streams");
+        meals.sort(Comparator.comparing(UserMeal::getDateTime));
 
+        Map<LocalDate, Integer> map = meals
+                .stream()
+                .collect(Collectors.toMap(um -> um.getDateTime().toLocalDate(), UserMeal::getCalories, Integer::sum));
 
-        return null;
+        List<UserMealWithExcess> list = meals
+                .stream().filter(um -> TimeUtil.isBetweenInclusive(um.getDateTime().toLocalTime(), startTime, endTime))
+                    .map(um -> new UserMealWithExcess(um.getDateTime(), um.getDescription(), um.getCalories(), map.get(um.getDateTime().toLocalDate()) > caloriesPerDay))
+                .collect(Collectors.toList());
+
+        return list;
     }
 }
