@@ -56,7 +56,7 @@ public class UserMealsUtil {
                 .collect(Collectors.toMap(um -> um.getDateTime().toLocalDate(), UserMeal::getCalories, Integer::sum));
 
         return meals
-                .stream().filter(um -> TimeUtil.isBetweenInclusive(um.getDateTime().toLocalTime(), startTime, endTime))
+                .stream().sorted().filter(um -> TimeUtil.isBetweenInclusive(um.getDateTime().toLocalTime(), startTime, endTime))
                     .map(um -> new UserMealWithExcess(um.getDateTime(), um.getDescription(), um.getCalories(), map.get(um.getDateTime().toLocalDate()) > caloriesPerDay))
                 .collect(Collectors.toList());
 
