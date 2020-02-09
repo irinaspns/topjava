@@ -22,7 +22,6 @@
         <th style="width:10%">Калории</th>
     </tr>
     <c:forEach var="mealTo" items="${mealsToList}">
-        <tr>
         <c:choose>
             <c:when test="${mealTo.excess}">
                 <tr style="background-color:#D21D29">
