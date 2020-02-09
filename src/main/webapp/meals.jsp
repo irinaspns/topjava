@@ -4,7 +4,7 @@
 
 <html>
 <head>
-    <title>Meals</title>
+    <title>Meals2</title>
     <style>
         table, th, td {
             border: 1px solid black;
