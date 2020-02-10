@@ -22,14 +22,9 @@
         <th style="width:10%">Калории</th>
     </tr>
     <c:forEach var="mealTo" items="${mealsToList}">
-        <c:choose>
-            <c:when test="${mealTo.excess}">
-                <tr style="background-color:#D21D29">
-            </c:when>
-            <c:otherwise>
-                <tr style="background-color:#1DD235">
-            </c:otherwise>
-        </c:choose>
+        <c:set var="excess" value="${mealTo.excess}"/>
+        <c:set var="bgc" value="${excess ? '#D21D29' : '#1DD235'}"/>
+        <tr style="background-color:${bgc}">
             <fmt:parseDate value="${mealTo.dateTime}" pattern="yyyy-MM-dd'T'HH:mm" var ="formatedDate"/>
             <td style="width:30%"><fmt:formatDate pattern="yyyy-MM-dd HH:mm" value="${formatedDate}"/></td>
             <td style="width:60%"><c:out value="${mealTo.description}" /></td>
